@@ -47,6 +47,7 @@ To launch the interactive testing dashboard, run:
 streamlit run app.py
 ```
 This will open a local web server (usually at http://localhost:8501). Click "Run Full API Audit" to watch the agent bootstrap, fire payloads, and visualize the generated report.json.
+![img](img.png)
 
 ### Option B: Command Line Interface (CLI)
 
