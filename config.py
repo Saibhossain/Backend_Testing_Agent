@@ -1,5 +1,7 @@
 import os
 from google import genai
+from dotenv import load_dotenv
+load_dotenv()
 
 # --- CONFIGURATION ---
 BASE_URL = "https://backend-agent-test.onrender.com"

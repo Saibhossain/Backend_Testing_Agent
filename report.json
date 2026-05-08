@@ -1,21 +1,23 @@
 {
   "target": {
     "base_url": "https://backend-agent-test.onrender.com",
-    "tested_at": "2026-05-07T19:54:00.739185+00:00",
+    "tested_at": "2026-05-08T07:45:49.701532+00:00",
     "spec_version": "1.0.0",
     "agent_name": "Hybrid-Deterministic-Auditor",
-    "duration_seconds": 11.21
+    "duration_seconds": 17.14
   },
   "summary": {
-    "total": 2,
+    "total": 4,
     "by_severity": {
-      "critical": 1,
-      "high": 1,
+      "critical": 2,
+      "high": 2,
       "medium": 0,
       "low": 0
     },
     "by_category": {
       "rate_limiting": 1,
+      "input_validation": 1,
+      "authorization": 1,
       "authentication": 1
     },
     "endpoints_tested": 11,
@@ -24,7 +26,7 @@
   },
   "findings": [
     {
-      "id": "BUG-F1D157AD",
+      "id": "BUG-19B2D345",
       "category": "rate_limiting",
       "severity": "high",
       "endpoint": "/auth/login",
@@ -47,7 +49,52 @@
       "confidence": "high"
     },
     {
-      "id": "BUG-BD741316",
+      "id": "BUG-3DEEAACA",
+      "category": "input_validation",
+      "severity": "high",
+      "endpoint": "/users/me",
+      "method": "PATCH",
+      "title": "Missing Type Validation on User Profile",
+      "description": "Expected: 422 Validation Error | Actual: 200",
+      "evidence": {
+        "request": {
+          "payload": {
+            "age": "twenty-five"
+          }
+        },
+        "response": {
+          "status": 200,
+          "body": "{\"id\":1,\"username\":\"alice\",\"email\":\"invalid\",\"password_hash\":\"$2b$12$Qs3zJEoS1EHXddvA5.ZBluRgjO.dwk0CFlxUszTKhDirBB.PO5W/i\",\"age\":\"twenty-five\",\"role\":\"admin\",\"bio\":\"Just updated my bio\",\"body\":\"x\"}"
+        }
+      },
+      "reproduction": "Send PATCH to /users/me",
+      "expected": "422 Validation Error",
+      "actual": "200",
+      "confidence": "high"
+    },
+    {
+      "id": "BUG-F7A8AA91",
+      "category": "authorization",
+      "severity": "critical",
+      "endpoint": "/posts/{post_id}",
+      "method": "DELETE",
+      "title": "Insecure Direct Object Reference (IDOR) on Post Deletion",
+      "description": "Expected: 403 Forbidden or 404 Not Found | Actual: 200",
+      "evidence": {
+        "request": {
+          "target_post_id": 99999
+        },
+        "response": {
+          "status": 200
+        }
+      },
+      "reproduction": "Send DELETE to /posts/{post_id}",
+      "expected": "403 Forbidden or 404 Not Found",
+      "actual": "200",
+      "confidence": "high"
+    },
+    {
+      "id": "BUG-A40F3A63",
       "category": "authentication",
       "severity": "critical",
       "endpoint": "/users/me",

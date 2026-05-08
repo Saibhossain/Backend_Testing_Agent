@@ -3,12 +3,10 @@ import time
 import uuid
 import requests
 
-# Import from our custom modules
 from config import BASE_URL, OPENAPI_FILE, SCHEMA_FILE, client
 from tests import run_all_tests
 from enricher import enrich_agent_findings
 from reporter import generate_final_report
-
 
 class HybridTestingAgent:
     def __init__(self):
@@ -62,19 +60,9 @@ class HybridTestingAgent:
         self.raw_findings[sig] = finding
         print(f"   [!] DETECTED: {raw_title} ({category})")
 
-
 if __name__ == "__main__":
-    # 1. Initialize State
     agent = HybridTestingAgent()
-
-    # 2. Setup Authentication
     agent.authenticate()
-
-    # 3. Execute Deterministic Engine (tests.py)
     run_all_tests(agent)
-
-    # 4. Enrich with LLM (enricher.py)
     enrich_agent_findings(agent, client)
-
-    # 5. Generate JSON output (reporter.py)
     generate_final_report(agent)
