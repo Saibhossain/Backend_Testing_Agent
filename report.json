@@ -1,0 +1,71 @@
+{
+  "target": {
+    "base_url": "https://backend-agent-test.onrender.com",
+    "tested_at": "2026-05-07T19:54:00.739185+00:00",
+    "spec_version": "1.0.0",
+    "agent_name": "Hybrid-Deterministic-Auditor",
+    "duration_seconds": 11.21
+  },
+  "summary": {
+    "total": 2,
+    "by_severity": {
+      "critical": 1,
+      "high": 1,
+      "medium": 0,
+      "low": 0
+    },
+    "by_category": {
+      "rate_limiting": 1,
+      "authentication": 1
+    },
+    "endpoints_tested": 11,
+    "endpoints_total": 11,
+    "coverage_percent": 100.0
+  },
+  "findings": [
+    {
+      "id": "BUG-F1D157AD",
+      "category": "rate_limiting",
+      "severity": "high",
+      "endpoint": "/auth/login",
+      "method": "POST",
+      "title": "No Rate Limiting on Login",
+      "description": "Expected: 429 Too Many Requests after threshold | Actual: No 429 response received after 50 concurrent requests",
+      "evidence": {
+        "request": {
+          "burst_count": 50
+        },
+        "response": {
+          "observed_status_codes": [
+            401
+          ]
+        }
+      },
+      "reproduction": "Send POST to /auth/login",
+      "expected": "429 Too Many Requests after threshold",
+      "actual": "No 429 response received after 50 concurrent requests",
+      "confidence": "high"
+    },
+    {
+      "id": "BUG-BD741316",
+      "category": "authentication",
+      "severity": "critical",
+      "endpoint": "/users/me",
+      "method": "PATCH",
+      "title": "Broken Authentication Enforcement",
+      "description": "Expected: 401 Unauthorized | Actual: 500",
+      "evidence": {
+        "request": {
+          "headers": {}
+        },
+        "response": {
+          "status": 500
+        }
+      },
+      "reproduction": "Send PATCH to /users/me",
+      "expected": "401 Unauthorized",
+      "actual": "500",
+      "confidence": "high"
+    }
+  ]
+}
